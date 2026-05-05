@@ -13,7 +13,7 @@ import java.util.List;
 public class BoardService {
 	private final boardrepository boardRepository;
 
-	// 1. 글 저장 로직
+	// 글 저장 로직
 	@Transactional
 	public Long save(requestdto request) {
 		Boardentity board = Boardentity.builder()
@@ -23,30 +23,28 @@ public class BoardService {
 		return boardRepository.save(board).getIdx();
 	}
 
-	// 2. 전체 조회 로직
+	// 전체 조회 로직
 	public List<Boardentity> findAll() {
 		return boardRepository.findAll();
 	}
 
-	// 3. 상세 조회 로직
+	// 상세 조회 로직
 	public Boardentity findById(Long id) {
 		return boardRepository.findById(id)
 				.orElseThrow(() -> new IllegalArgumentException("해당 게시글이 없습니다."));
 	}
 
-	// ------------------ 여기에 추가 ------------------
 
-	// 4. 수정 로직 (수정할 때는 @Transactional이 꼭 필요해요!)
+	// 수정 로직
 	@Transactional
 	public void update(Long id, requestdto request) {
 		Boardentity board = boardRepository.findById(id)
 				.orElseThrow(() -> new IllegalArgumentException("수정할 게시글이 없습니다. id=" + id));
 
-		// 엔티티 내부의 update 메서드를 호출해서 데이터 변경
 		board.update(request.title(), request.content());
 	}
 
-	// 5. 삭제 로직
+	// 삭제 로직
 	@Transactional
 	public void delete(Long id) {
 		Boardentity board = boardRepository.findById(id)
